@@ -40,44 +40,38 @@ MAZE = [["|","|","|","|","|","|","|"],
         ["|","|","|","|","|","|","|"],]
 
 
-
-
 def findStartIndex(maze,startIndex):
     for i in range(len(maze)):
         for ii in range(len(maze[i])):
             if maze[i][ii] == startIndex:
                 return i,ii
 
-def searchAfterMice(maze,x,y,path, target):
-    if (maze[x][y] == target):
-        path.append([x,y])
+def searchAfterMice(maze,row,col,path, target):
+    if (maze[row][col] == target):
+        path.append([row,col])
         return True
-    if ((maze[x][y] == "|") or (maze[x][y] == "M")):
+    if ((maze[row][col] == "|") or (maze[row][col] == "M")):
         return False
-    maze[x][y] = "M"
-    result = searchAfterMice(maze,x,   y-1,path,target)
-    if result:
-        path.append([x,y])
+    maze[row][col] = "M"
+    if searchAfterMice(maze,row,col-1,path,target):
+        path.append([row,col])
         return True
-    result = searchAfterMice(maze,x,   y+1,path,target)
-    if result:
-        path.append([x,y])
+    if searchAfterMice(maze,row,col+1,path,target):
+        path.append([row,col])
         return True
-    result = searchAfterMice(maze,x+1, y  ,path,target)
-    if result:
-        path.append([x,y])
+    if searchAfterMice(maze,row+1,col,path,target):
+        path.append([row,col])
         return True
-    result = searchAfterMice(maze,x-1, y  ,path,target)
-    if result:
-        path.append([x,y])
+    if searchAfterMice(maze,row-1,col,path,target):
+        path.append([row,col])
         return True
 
-x,y = findStartIndex(MAZE,"S")
+row,col = findStartIndex(MAZE,"S")
 target = "Z"
 
 maze = copy.deepcopy(MAZE)
 path = []
-foundX = searchAfterMice(maze,x,y,path,target)
+foundX = searchAfterMice(maze,row,col,path,target)
 
 for i in MAZE:
     print(i)
