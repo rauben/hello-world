@@ -1,45 +1,5 @@
 import copy
 
-#MAZE = [[1,1,1,1,1],
-#        [1,3,1,1,1],
-#        [1,0,1,4,1],
-#        [1,0,0,0,1],
-#        [1,1,1,1,1]]
-
-
-'''
-MAZE = [[1,1,1,1,1,1,1],
-        [1,3,1,1,1,1,1],
-        [1,0,1,0,0,0,1],
-        [1,0,0,0,1,0,1],
-        [1,1,1,1,1,0,1],
-        [1,0,0,0,0,0,1],
-        [1,1,0,1,1,0,1],
-        [1,1,4,1,1,0,1],
-        [1,1,1,1,1,1,1],]
-
-MAZE = [["X","X","X","X","X","X","X"],
-        ["X","S","X","X","X","X","X"],
-        ["X"," ","X"," "," "," ","X"],
-        ["X"," "," "," ","X"," ","X"],
-        ["X","X","X","X","X"," ","X"],
-        ["X"," "," "," "," "," ","X"],
-        ["X","X"," ","X","X"," ","X"],
-        ["X","X","Z","X","X"," ","X"],
-        ["X","X","X","X","X","X","X"],]
-'''
-
-MAZE = [["|","|","|","|","|","|","|"],
-        ["|","S","|","|","|","|","|"],
-        ["|"," ","|"," "," "," ","|"],
-        ["|"," "," "," ","|"," ","|"],
-        ["|","|","|","|","|"," ","|"],
-        ["|"," "," "," "," "," ","|"],
-        ["|","|"," ","|","|"," ","|"],
-        ["|","|","Z","|","|"," ","|"],
-        ["|","|","|","|","|","|","|"],]
-
-
 def findStartIndex(maze,startIndex):
     for i in range(len(maze)):
         for ii in range(len(maze[i])):
@@ -66,19 +26,39 @@ def searchAfterMice(maze,row,col,path, target):
         path.append([row,col])
         return True
 
-row,col = findStartIndex(MAZE,"S")
-target = "Z"
+def drawPath(maze,path, pathSymbol):
+    for i in path[1:-1]:
+        maze[i[0]][i[1]] = pathSymbol
 
-maze = copy.deepcopy(MAZE)
-path = []
-foundX = searchAfterMice(maze,row,col,path,target)
+def makeMaze():  
+    maze = [["|","|","|","|","|","|","|"],
+            ["|","S","|","|","|","|","|"],
+            ["|"," ","|"," "," "," ","|"],
+            ["|"," "," "," ","|"," ","|"],
+            ["|","|","|","|","|"," ","|"],
+            ["|"," "," "," "," "," ","|"],
+            ["|","|"," ","|","|"," ","|"],
+            ["|","|","Z","|","|"," ","|"],
+            ["|","|","|","|","|","|","|"],]
+    return maze
 
-for i in MAZE:
-    print(i)
+def printMaze(maze):
+    for i in maze:
+        print(i)
 
-print()
-for i in path[1:-1]:
-    MAZE[i[0]][i[1]] = "M"
+if __name__ == "__main__":
 
-for i in MAZE:
-    print(i)
+    path = []
+    target = "Z"
+    start  = "S"
+    pathSymbol = "M"
+
+    maze = makeMaze()
+    row,col = findStartIndex(maze,start)
+    mazeCopy = copy.deepcopy(maze)
+
+    found = searchAfterMice(mazeCopy,row,col,path,target)
+
+    printMaze(maze)
+    drawPath(maze,path,pathSymbol)
+    printMaze(maze)
