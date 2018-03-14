@@ -1,7 +1,7 @@
 import numpy as np
 import cv2
 
-img = cv2.imread('C:/Users/benedikt.rauscher/Desktop/example.png', 1)
+img = cv2.imread('./example.png', 1)
 hsv = cv2.cvtColor(img, cv2.COLOR_BGR2HSV)
 
 #filter after color
@@ -14,7 +14,7 @@ upper = np.array([180,255,255])
 mask1 = cv2.inRange(hsv,lower,upper)
 hsvR1 = cv2.bitwise_and(hsv,hsv,mask=mask1)
 hsvRF = cv2.bitwise_or(hsvR0,hsvR1)
-#totalMask = cv2.bitwise_or(mask0,mask1)
+totalMask = cv2.bitwise_or(mask0,mask1)
 totalMask = cv2.bitwise_not(cv2.bitwise_or(mask0,mask1))
 
 
@@ -27,9 +27,19 @@ cnt = contours[-1]
 cv2.fillPoly(totalMask,[cnt],color=(255,255,255))
 newImg = cv2.bitwise_and(img,img,mask=totalMask)
 
+lower = np.array([254,255,255])
+upper = np.array([255,255,255]) 
+maskExtra = cv2.inRange(newImg,lower,upper)
+
+result0 = np.count_nonzero(maskExtra)
+result1 = np.count_nonzero(totalMask)
+result3 = (np.count_nonzero(maskExtra) / (np.count_nonzero(totalMask)/100))
+
+
 cv2.imshow('hsv',hsv)
 cv2.imshow('hsvr0',hsvRF)
 cv2.imshow('mask',totalMask)
+cv2.imshow('extraMask',maskExtra)
 cv2.imshow('newImg',newImg)
 
 
